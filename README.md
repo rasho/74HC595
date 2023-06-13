@@ -15,7 +15,7 @@ Ova biblioteka omogućava jednostavno upravljanje sa 74HC595 siftregistrom na Ar
 1. Uključite biblioteku u svom Arduino kodu koristeći `#include <ShiftRegister74HC595.h>`.
 2. Kreirajte instancu klase `ShiftRegister74HC595` sa odgovarajućim pinovima za povezivanje sa registrom, na primer: `ShiftRegister74HC595 shiftRegister(DATA_PIN, LATCH_PIN, CLOCK_PIN, NUM_REGISTERS)`, gde su `DATA_PIN`, `LATCH_PIN` i `CLOCK_PIN` brojevi pinova koje koristite, a `NUM_REGISTERS` broj registara koje koristite.
 3. Pomoću metoda klase `ShiftRegister74HC595` postavite željene izlazne vrednosti i izvodite efekte na registrima.
-4. Primer koda možete videti na [wiki stranici](https://github.com/rasho/74HC595/wiki)
+4. Primer koda možete videti na [wiki stranici](https://github.com/rasho/74HC595/wiki#primer-koda).
 
 ## Metode
 
