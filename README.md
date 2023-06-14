@@ -1,63 +1,70 @@
 # Biblioteka ShiftRegister74HC595
 
-Ova biblioteka omogućava jednostavno upravljanje sa 74HC595 siftregistrom na Arduino platformi. Omogućava vam da lako podešavate izlazne pinove na registru i izvodite različite efekte kao što su blinkanje, postepeno pojačavanje/smanjivanje svetlosti, pulsiranje, slučajno blinkanje, talasni efekat i još mnogo toga.
+ShiftRegister74HC595 je Arduino biblioteka koja omogućava upravljanje sa više 74HC595 shift registara istovremeno. Ova biblioteka olakšava proširivanje izlaznih i ulaznih pinova Arduino mikrokontrolera koristeći samo nekoliko pinova mikrokontrolera.
 
-## Instalacija
+### Instalacija
 
-1. Preuzmite biblioteku kao ZIP datoteku.
+1. Preuzmite najnoviju verziju biblioteke sa [GitHub repozitorijuma](https://github.com/rasho/74HC595).
 2. Otvorite Arduino IDE.
-3. Izaberite opciju "Sketch" u meniju, zatim "Include Library" i na kraju "Add .ZIP Library".
-4. Izaberite prethodno preuzetu ZIP datoteku biblioteke.
-5. Biblioteka je sada uspešno instalirana i spremna za upotrebu.
+3. Kliknite na **Sketch** u meniju Arduino IDE, zatim na **Include Library** i na **Add .ZIP Library**.
+4. Pronađite preuzetu biblioteku i odaberite je.
+5. Biblioteka će biti instalirana i spremna za upotrebu.
 
-## Korišćenje
+### Uključivanje biblioteke
 
-1. Uključite biblioteku u svom Arduino kodu koristeći `#include <ShiftRegister74HC595.h>`.
-2. Kreirajte instancu klase `ShiftRegister74HC595` sa odgovarajućim pinovima za povezivanje sa registrom, na primer: `ShiftRegister74HC595 shiftRegister(DATA_PIN, LATCH_PIN, CLOCK_PIN, NUM_REGISTERS)`, gde su `DATA_PIN`, `LATCH_PIN` i `CLOCK_PIN` brojevi pinova koje koristite, a `NUM_REGISTERS` broj registara koje koristite.
-3. Pomoću metoda klase `ShiftRegister74HC595` postavite željene izlazne vrednosti i izvodite efekte na registrima.
-4. Primer koda možete videti na [wiki stranici](https://github.com/rasho/74HC595/wiki#primer-koda).
+Da biste koristili ShiftRegister74HC595 biblioteku, dodajte sledeću liniju koda na početak vašeg Arduino projekta:
 
-## Metode
+```cpp
+#include <ShiftRegisterMulti.h>
+```
 
-### Konstruktor
+### Kreiranje objekta
 
-- `ShiftRegister74HC595(int data, int latch, int clock, int num)` - Kreira instancu klase ShiftRegister74HC595. Parametri su brojevi pinova za povezivanje sa registrom (`data`, `latch`, `clock`) i broj registara (`num`).
+Pre nego što počnete koristiti funkcionalnosti biblioteke, trebate kreirati objekat klase ShiftRegisterMulti. To možete uraditi na sledeći način:
 
-### Postavljanje izlaza
+```cpp
+// Kreiranje objekta biblioteke
+ShiftRegisterMulti shiftRegisters(dataPin, latchPin, clockPin, numRegisters, numPinsPerRegister);
+```
 
-- `void setOutput(int pin, bool value)` - Postavlja izlazni pin na određenu vrednost (HIGH ili LOW) na svim registrima.
-- `void setOutput(int registerIndex, int pin, bool value)` - Postavlja izlazni pin na određenu vrednost (HIGH ili LOW) na određenom registru.
+Gde su:
 
-### Ažuriranje registara
+- `dataPin`, `latchPin` i `clockPin`: Brojevi pinova koje koristite za komunikaciju sa shift registrima.
+- `numRegisters`: Broj shift registara koje koristite.
+- `numPinsPerRegister`: Broj pinova po svakom shift registru.
 
-- `void updateRegisters()` - Ažurira registre i osvežava izlazne vrednosti na registru.
+### Metode
 
-### Poništavanje registara
+ShiftRegisterMulti biblioteka sadrži sledeće metode:
 
-- `void clearRegisters()` - Postavlja sve izlazne vrednosti na registru na LOW (0).
+- `begin()`: Inicijalizacija biblioteke. Pozovite ovu metodu u funkciji `setup()` pre početka korišćenja shift registara.
+- `setOutput(registerIndex, pinIndex, state)`: Postavlja izlazno stanje određenog pina na određenom registru.
+- `setAllOutputs(state)`: Postavlja izlazno stanje svih pinova na svim registrima na istu vrednost.
+- `setAllOutputsLow()`: Postavlja izlazno stanje svih pinova na svim registrima na LOW (isključeno) stanje.
+- `setAllOutputsHigh()`: Postavlja izlazno stanje svih pinova na svim registrima na HIGH (uključeno) stanje.
+- `setClockFrequency(frequency)`: Postavlja frekvenciju takta za shift registre.
+- `getInputState(registerIndex, pinIndex)`: Vraća trenutno stanje ulaznog pina na određenom registru.
+- `updateRegisters()`: Ažurira stanje registara i prenosi podatke na izlazne pinove.
+- `setPinMode(registerIndex, pinIndex, pinMode)`: Postavlja režim rada određenog pina na određenom regist
 
-### Pomeranje
+ru.
+- `getPinMode(registerIndex, pinIndex)`: Vraća trenutno podešen režim rada određenog pina na određenom registru.
+- `setOutputHoldTime(holdTime)`: Postavlja vreme zadržavanja izlaznog stanja pre nego što se registri ažuriraju.
+- `getOutputHoldTime()`: Vraća trenutno podešeno vreme zadržavanja izlaznog stanja.
+- `readInputStates(inputStates)`: Očitava stanje svih ulaznih pinova i smešta ih u niz `inputStates`.
 
-- `void shiftLeft()` - Pomeranje sadržaja registara ulevo.
-- `void shiftRight()` - Pomeranje sadržaja registara udesno.
+### Licence
 
-### Efekti
+Ova biblioteka je dostupna pod [MIT licencom](https://github.com/example/shift-register-multi/blob/main/LICENSE).
 
-- `void blinkEffect(int registerIndex, int pin, int interval)` - Blinkanje određenog pina na registru sa zadatim intervalom.
-- `void fadeEffect(int registerIndex, int pin, int duration)` - Post
+### Autor
 
-epeno pojačavanje i smanjivanje svetlosti određenog pina na registru sa zadatom dužinom trajanja.
-- `void pulseEffect(int registerIndex, int pin, int duration)` - Pulsiranje određenog pina na registru sa zadatom dužinom trajanja.
-- `void randomBlinkEffect(int registerIndex, int pin, int interval)` - Slučajno blinkanje određenog pina na registru sa zadatim intervalom.
-- `void waveEffect(int duration, int interval)` - Talasni efekat preko svih pinova na registrima sa zadatom dužinom trajanja i intervalom.
-- `void fadingTrailEffect(int duration, int interval)` - Efekat postepenog gašenja svetlosti preko svih pinova na registrima sa zadatom dužinom trajanja i intervalom.
-- `void sparkleEffect(int numPins, int duration, int interval)` - Efekat treperenja nasumično odabranog broja pinova na registru sa zadatom dužinom trajanja i intervalom.
-- `void runningLightsEffect(int direction, int speed)` - Efekat trčećih svetala u određenom smeru i sa zadatom brzinom.
+Biblioteku ShiftRegisterMulti je razvio [Radenko Bogdanovic](https://github.com/rasho). Ako imate bilo kakva pitanja, možete se obratiti autoru.
 
-## Napomena
+### Problemi i doprinosi
 
-Ova biblioteka je razvijena za upotrebu na Arduino platformi i testirana je na kompatibilnim mikrokontrolerima. Može biti prilagođena ili proširena prema vašim potrebama.
+Ako primetite bilo kakve probleme prilikom korišćenja biblioteke ili imate predloge za poboljšanje, slobodno otvorite novi problem (issue) na [GitHub stranici projekta](https://github.com/rasho/74HC595/issues). Takođe, pozivamo vas da doprinesete razvoju biblioteke kroz otvaranje novih zahteva za povlačenje (pull request).
 
-## Autor
+### Zaključak
 
-Biblioteka ShiftRegister74HC595 je razvijena od strane Radenka Bogdanovica. Ako imate pitanja, sugestije ili problema, slobodno me kontaktirajte na [rasho984@gmail.com].
+ShiftRegisterMulti biblioteka pruža jednostavan način za upravljanje sa više 74HC595 shift registara na Arduino platformi. Sa ovom bibliotekom, možete proširiti izlazne i ulazne pinove vašeg Arduino projekta na jednostavan način.
