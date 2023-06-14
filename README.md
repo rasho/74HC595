@@ -15,7 +15,7 @@ ShiftRegister74HC595 je Arduino biblioteka koja omogućava upravljanje sa više 
 Da biste koristili ShiftRegister74HC595 biblioteku, dodajte sledeću liniju koda na početak vašeg Arduino projekta:
 
 ```cpp
-#include <ShiftRegisterMulti.h>
+#include <ShiftRegister74HC595.h>
 ```
 
 ### Kreiranje objekta
