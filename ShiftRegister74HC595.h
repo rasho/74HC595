@@ -1,32 +1,38 @@
-#ifndef ShiftRegister74HC595_h
-#define ShiftRegister74HC595_h
+#ifndef ShiftRegisterMulti_h
+#define ShiftRegisterMulti_h
 
 #include <Arduino.h>
 
-class ShiftRegister74HC595 {
-  private:
-    int dataPin;
-    int latchPin;
-    int clockPin;
-    int numRegisters;
-    byte* registers;
+class ShiftRegisterMulti {
+public:
+  ShiftRegisterMulti(int dataPin, int latchPin, int clockPin, int numRegisters, int numPinsPerRegister);
+  void begin();
+  void setOutput(int registerIndex, int pinIndex, bool state);
+  void setAllOutputs(bool state);
+  void setAllOutputsLow();
+  void setAllOutputsHigh();
+  void setClockFrequency(unsigned long frequency);
+  bool getInputState(int registerIndex, int pinIndex);
+  void updateRegisters();
+  void setPinMode(int registerIndex, int pinIndex, int pinMode);
+  int getPinMode(int registerIndex, int pinIndex);
+  void setOutputHoldTime(int holdTime);
+  int getOutputHoldTime();
+  void readInputStates(bool* inputStates);
+  void setClockDivision(int clockDivision);
+  int getClockDivision();
 
-  public:
-    ShiftRegister74HC595(int data, int latch, int clock, int num);
-    void setOutput(int pin, bool value);
-    void setOutput(int registerIndex, int pin, bool value);
-    void updateRegisters();
-    void clearRegisters();
-    void shiftLeft();
-    void shiftRight();
-    void blinkEffect(int registerIndex, int pin, int interval);
-    void fadeEffect(int registerIndex, int pin, int duration);
-    void pulseEffect(int registerIndex, int pin, int duration);
-    void randomBlinkEffect(int registerIndex, int pin, int interval);
-    void waveEffect(int duration, int interval);
-    void fadingTrailEffect(int duration, int interval);
-    void sparkleEffect(int numPins, int duration, int interval);
-    void runningLightsEffect(int direction, int speed);
+private:
+  int _dataPin;
+  int _latchPin;
+  int _clockPin;
+  int _numRegisters;
+  int _numPinsPerRegister;
+  byte* _registerStates;
+  byte* _registerModes;
+  unsigned long _outputHoldTime;
+  int _clockDivision;
+  bool isValidPinIndex(int pinIndex);
 };
 
 #endif
