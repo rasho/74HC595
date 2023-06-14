@@ -55,7 +55,7 @@ ru.
 
 ### Licence
 
-Ova biblioteka je dostupna pod [MIT licencom](https://github.com/example/shift-register-multi/blob/main/LICENSE).
+Ova biblioteka je dostupna pod [Licencom](https://github.com/rasho/74HC595/blob/main/LICENCE.md).
 
 ### Autor
 
